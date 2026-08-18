@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Checklist de Veículo — ILED</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#0a0c10;color:#e8eaed;font-size:15px;line-height:1.4}
+.wrap{max-width:640px;margin:0 auto;padding:16px}
+.top{display:flex;align-items:center;gap:12px;border-bottom:3px solid #e10600;padding:14px 0;margin-bottom:16px}
+.top .logo{font-weight:800;font-size:20px;letter-spacing:.06em}
+.top .logo b{color:#e10600}
+.top .sub{font-size:12px;color:#8a909c}
+h2{font-size:15px;color:#ff5a5a;text-transform:uppercase;letter-spacing:.04em;margin:22px 0 10px}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;margin-bottom:12px}
+label{display:block;font-size:12px;color:#9aa0ac;margin-bottom:5px;text-transform:uppercase;letter-spacing:.03em}
+input,select,textarea{width:100%;background:#12151b;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:11px;color:#e8eaed;font-size:15px;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#e10600}
+textarea{resize:vertical}
+.field{margin-bottom:12px}
+.item{border-bottom:1px solid rgba(255,255,255,.06);padding:11px 0}
+.item:last-child{border-bottom:none}
+.item .nome{font-weight:600;margin-bottom:8px}
+.opts{display:flex;gap:6px;margin-bottom:7px}
+.opt{flex:1;text-align:center;padding:9px 0;border-radius:8px;border:1.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.03);font-weight:700;font-size:13px;cursor:pointer;user-select:none}
+.opt.ok.on{background:#1a7f43;border-color:#1a7f43;color:#fff}
+.opt.falha.on{background:#b00500;border-color:#b00500;color:#fff}
+.opt.na.on{background:#555b66;border-color:#555b66;color:#fff}
+.item .obs{font-size:13px;padding:8px}
+.estado{display:flex;gap:8px}
+.estado .eb{flex:1;text-align:center;padding:12px 0;border-radius:9px;border:1.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.03);font-weight:700;cursor:pointer}
+.estado .eb.bom.on{background:#1a7f43;border-color:#1a7f43;color:#fff}
+.estado .eb.medio.on{background:#b8860b;border-color:#b8860b;color:#fff}
+.estado .eb.ruim.on{background:#b00500;border-color:#b00500;color:#fff}
+.areas{display:flex;flex-wrap:wrap;gap:7px}
+.area{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.03);font-size:13px;cursor:pointer}
+.area.on{background:rgba(225,6,0,.2);border-color:#e10600;color:#ff8080}
+.btn{width:100%;padding:15px;border:none;border-radius:11px;font-weight:800;font-size:16px;cursor:pointer;background:#e10600;color:#fff;margin-top:8px}
+.btn:disabled{opacity:.5}
+.btn.sec{background:rgba(255,255,255,.08);color:#e8eaed}
+.msg{padding:12px;border-radius:9px;margin:12px 0;font-size:14px;text-align:center}
+.msg.ok{background:rgba(26,127,67,.18);border:1px solid rgba(26,127,67,.5);color:#7fe0a8}
+.msg.err{background:rgba(176,5,0,.18);border:1px solid rgba(176,5,0,.5);color:#ff9a9a}
+.done{text-align:center;padding:40px 20px}
+.done .ico{font-size:56px;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><img src="data:image/jpeg;base64,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" alt="ILED Produções" style="height:52px;width:auto"><div><div style="font-weight:700">Checklist de Veículo</div><div class="sub">Preenchimento em campo</div></div></div>
+  <div id="app"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
+<script>
+var SB_URL="https://bmgwnoulgthejfjxqugw.supabase.co"
+var SB_KEY="sb_publishable_ya-Eb1L5tsbvC1YF8iYQ-A_ML-ZC8Ef"
+var sb=null
+function initSB(){
+  try{ if(window.supabase&&window.supabase.createClient){ sb=window.supabase.createClient(SB_URL,SB_KEY); return true } }catch(e){}
+  return false
+}
+
+var GRUPOS=[
+  {g:'Luzes Traseiras', itens:['Da placa','Direita — Luz','Direita — Luz de ré','Direita — Luz de freio','Direita — Luz de seta','Esquerda — Luz','Esquerda — Luz de ré','Esquerda — Luz de freio','Esquerda — Luz de seta']},
+  {g:'Luzes Dianteiras', itens:['Da placa','Direita — Farol alto','Direita — Farol baixo','Direita — Seta','Direita — Luz de neblina','Esquerda — Farol baixo','Esquerda — Farol alto','Esquerda — Seta','Esquerda — Luz neblina']},
+  {g:'Segurança', itens:['CRLV válida','Buzina','Chave de roda','Cintos','Tacógrafo na validade','Extintor','Limpadores','Macaco','Painel','Retrovisor interno','Retrovisor direito','Retrovisor esquerdo','Vazamentos visíveis','Triângulo','Pneus']},
+  {g:'Motor', itens:['Óleo de motor','Água do limpador','Água do radiador','Embreagem','Sistema de freio','Freio de mão','Óleo de freio']},
+  {g:'Baú', itens:['Baú limpo','Cintas organizadas','Rampa amarrada','Iluminação do baú']}
+]
+var ESTADO_ITENS=['Lataria','Pintura','Vidros','Bancos','Painel interno','Pneus (desgaste)']
+var AREAS=['Frente','Traseira','Lateral direita','Lateral esquerda','Teto','Baú']
+function key(g,it){return g+'|'+it}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+var C={data:new Date().toISOString().slice(0,10),demanda:'',veiculo:'',placa:'',motorista:'',km:'',estado:{},itens:{},areas:[],observacoes:'',foto:null}
+var VEICULOS=[]
+var SALVO=false
+
+function carregaVeiculos(){
+  render()  // desenha o formulário JÁ, sem esperar o banco
+  if(!initSB()){
+    // tenta de novo por até ~4s (caso o script do CDN ainda esteja carregando)
+    var tent=0
+    var iv=setInterval(function(){
+      tent++
+      if(initSB()){ clearInterval(iv); buscaVeiculos() }
+      else if(tent>=20){ clearInterval(iv) }  // desiste; motorista digita a placa manual
+    },200)
+    return
+  }
+  buscaVeiculos()
+}
+function buscaVeiculos(){
+  if(!sb) return
+  try{
+    sb.from('frota_veiculos').select('*').then(function(res){
+      if(res && res.data && res.data.length){ VEICULOS=res.data; render() }
+    })
+  }catch(e){}
+}
+function render(){
+  if(SALVO){ document.getElementById('app').innerHTML=
+    '<div class="done"><div class="ico">✅</div><h2 style="color:#7fe0a8;border:none">Checklist enviado!</h2>'+
+    '<p style="color:#9aa0ac">Obrigado. O checklist do veículo <b>'+esc(C.placa)+'</b> foi salvo no sistema ILED.</p>'+
+    '<button class="btn sec" onclick="novoOutro()">Preencher outro veículo</button></div>'
+    return }
+  var vopts='<option value="">— selecione o veículo —</option>'+VEICULOS.map(function(v){
+    return '<option value="'+esc(v.placa)+'|'+esc(v.veiculo||'')+'"'+((C.placa===v.placa)?' selected':'')+'>'+esc(v.placa)+' · '+esc(v.veiculo||'')+'</option>'
+  }).join('')
+  var ident='<div class="card">'+
+    '<div class="field"><label>Veículo</label><select id="f_vei" onchange="selVei(this.value)">'+vopts+'</select></div>'+
+    (VEICULOS.length?'':'<div class="field"><label>Placa</label><input id="f_placa" value="'+esc(C.placa)+'" oninput="C.placa=this.value" placeholder="ABC1D23"></div>')+
+    '<div class="grid2"><div class="field"><label>Data</label><input type="date" value="'+esc(C.data)+'" oninput="C.data=this.value"></div>'+
+    '<div class="field"><label>KM atual</label><input type="number" value="'+esc(C.km)+'" oninput="C.km=this.value" placeholder="000000"></div></div>'+
+    '<div class="field"><label>Motorista</label><input value="'+esc(C.motorista)+'" oninput="C.motorista=this.value" placeholder="Seu nome"></div>'+
+    '<div class="field"><label>Demanda / Evento (opcional)</label><input value="'+esc(C.demanda)+'" oninput="C.demanda=this.value" placeholder="Ex.: Rock in Rio"></div>'+
+    '<div class="field"><label>Foto do veículo (opcional)</label>'+
+      (C.foto
+        ? '<img src="'+C.foto+'" style="width:100%;border-radius:9px;border:1px solid rgba(255,255,255,.12);display:block"><button class="btn sec" style="margin-top:8px" onclick="removeFoto()">🗑 Remover foto</button>'
+        : '<button class="btn sec" onclick="abrirCamera()">📷 Tirar / escolher foto</button>')+
+      '<input id="f_foto" type="file" accept="image/*" capture="environment" style="display:none" onchange="setFoto(this)">'+
+    '</div>'+
+    '</div>'
+  // estado geral
+  var estado='<h2>Estado geral</h2><div class="card">'+ESTADO_ITENS.map(function(it){
+    function eb(v,lbl){return '<div class="eb '+v+(C.estado[it]===v?' on':'')+'" onclick="setEstado(\''+esc(it).replace(/'/g,"\\'")+'\',\''+v+'\')">'+lbl+'</div>'}
+    return '<div style="margin-bottom:12px"><div style="font-weight:600;margin-bottom:6px">'+esc(it)+'</div><div class="estado">'+eb('bom','Bom')+eb('medio','Médio')+eb('ruim','Ruim')+'</div></div>'
+  }).join('')+'</div>'
+  // áreas afetadas
+  var areas='<h2>Áreas afetadas</h2><div class="card"><div class="areas">'+AREAS.map(function(a){
+    return '<div class="area'+(C.areas.indexOf(a)>=0?' on':'')+'" onclick="toggleArea(\''+esc(a).replace(/'/g,"\\'")+'\')">'+esc(a)+'</div>'
+  }).join('')+'</div></div>'
+  // grupos de itens
+  var grupos=GRUPOS.map(function(gr){
+    return '<h2>'+esc(gr.g)+'</h2><div class="card">'+gr.itens.map(function(it){
+      var k=key(gr.g,it); var resp=C.itens[k]||{r:'',obs:''}
+      function op(v,lbl){return '<div class="opt '+v+(resp.r===v?' on':'')+'" onclick="setResp(\''+esc(k).replace(/'/g,"\\'")+'\',\''+v+'\')">'+lbl+'</div>'}
+      return '<div class="item"><div class="nome">'+esc(it)+'</div>'+
+        '<div class="opts">'+op('ok','OK')+op('falha','Falha')+op('na','N/A')+'</div>'+
+        '<input class="obs" value="'+esc(resp.obs)+'" oninput="setObs(\''+esc(k).replace(/'/g,"\\'")+'\',this.value)" placeholder="Observação (opcional)"></div>'
+    }).join('')+'</div>'
+  }).join('')
+  var obs='<h2>Observações gerais</h2><div class="card"><textarea rows="3" oninput="C.observacoes=this.value" placeholder="Anotações do motorista">'+esc(C.observacoes)+'</textarea></div>'
+  var msg='<div id="msg"></div>'
+  var btn='<button class="btn" onclick="salvar()">💾 Enviar checklist</button>'
+  document.getElementById('app').innerHTML=ident+estado+areas+grupos+obs+msg+btn
+}
+function selVei(v){ if(!v){C.placa='';C.veiculo='';return} var p=v.split('|'); C.placa=p[0]; C.veiculo=p[1]||'' }
+function setEstado(it,v){ C.estado[it]=(C.estado[it]===v?'':v); render() }
+function toggleArea(a){ var i=C.areas.indexOf(a); if(i>=0)C.areas.splice(i,1); else C.areas.push(a); render() }
+function setResp(k,v){ var cur=C.itens[k]||{r:'',obs:''}; cur.r=(cur.r===v?'':v); C.itens[k]=cur; render() }
+function setObs(k,val){ var cur=C.itens[k]||{r:'',obs:''}; cur.obs=val; C.itens[k]=cur }
+function contaAtencao(){ var n=0; for(var k in C.itens){ if(C.itens[k]&&C.itens[k].r==='falha')n++ } return n }
+function novoOutro(){ C={data:new Date().toISOString().slice(0,10),demanda:'',veiculo:'',placa:'',motorista:'',km:'',estado:{},itens:{},areas:[],observacoes:'',foto:null}; SALVO=false; render() }
+function abrirCamera(){ var el=document.getElementById('f_foto'); if(el)el.click() }
+function removeFoto(){ C.foto=null; render() }
+function setFoto(input){
+  var f=input.files&&input.files[0]; if(!f)return
+  var reader=new FileReader()
+  reader.onload=function(ev){
+    var img=new Image()
+    img.onload=function(){
+      var maxDim=1200, w=img.width, h=img.height
+      if(w>=h){ if(w>maxDim){ h=Math.round(h*maxDim/w); w=maxDim } }
+      else { if(h>maxDim){ w=Math.round(w*maxDim/h); h=maxDim } }
+      try{
+        var cv=document.createElement('canvas'); cv.width=w; cv.height=h
+        var ctx=cv.getContext('2d'); ctx.drawImage(img,0,0,w,h)
+        C.foto=cv.toDataURL('image/jpeg',0.7)
+      }catch(e){ C.foto=ev.target.result }
+      render()
+    }
+    img.onerror=function(){ C.foto=ev.target.result; render() }
+    img.src=ev.target.result
+  }
+  reader.readAsDataURL(f)
+}
+function salvar(){
+  if(!C.placa){ msgErr('Selecione ou informe a placa do veículo.'); return }
+  if(!C.motorista){ msgErr('Informe o nome do motorista.'); return }
+  if(!sb){ initSB() }
+  if(!sb){ msgErr('Sem conexão com o sistema. Abra pelo link (precisa de internet) e tente de novo.'); return }
+  var btn=document.querySelector('.btn'); if(btn){btn.disabled=true;btn.textContent='Enviando…'}
+  var payload={data:C.data||null,demanda:C.demanda,veiculo:C.veiculo,placa:C.placa,motorista:C.motorista,km:C.km,
+    estado:C.estado,itens:C.itens,areas:C.areas,observacoes:C.observacoes,atencao_qtd:contaAtencao(),foto_url:C.foto||null}
+  sb.from('frota_checklists').insert(payload).then(function(res){
+    if(res && res.error){ msgErr('Erro ao enviar: '+res.error.message); if(btn){btn.disabled=false;btn.textContent='💾 Enviar checklist'} }
+    else { SALVO=true; render() }
+  })
+}
+function msgErr(t){ var m=document.getElementById('msg'); if(m)m.innerHTML='<div class="msg err">'+esc(t)+'</div>'; window.scrollTo(0,document.body.scrollHeight) }
+carregaVeiculos()
+</script>
+</body>
+</html>
