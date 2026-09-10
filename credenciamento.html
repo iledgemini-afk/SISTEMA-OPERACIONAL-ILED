@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credenciamento · ILED</title>
+<style>
+  /* ====== CONFIG VISUAL — padrão ILED dark liquid glass ====== */
+  :root{
+    --red:#E10600; --red2:#FF1F44;
+    --bg0:#0a0b0e; --bg1:#12141a;
+    --glass:rgba(255,255,255,0.05);
+    --glass-brd:rgba(255,255,255,0.10);
+    --txt:#f3f4f6; --txt2:#9aa0ab;
+    --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
+    --radius:16px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--txt);
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(225,6,0,0.22), transparent 60%),
+      radial-gradient(700px 500px at 100% 0%, rgba(255,31,68,0.12), transparent 55%),
+      var(--bg0);
+    min-height:100vh; padding:16px 14px 60px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+  .brand{display:flex; align-items:center; gap:10px; margin:6px 2px 18px;}
+  .brand .dot{width:12px; height:12px; border-radius:50%;
+    background:var(--red); box-shadow:0 0 16px var(--red2);}
+  .brand b{font-size:15px; letter-spacing:2px;}
+  .brand span{color:var(--txt2); font-size:12px; letter-spacing:1px;}
+
+  .card{
+    background:var(--glass);
+    border:1px solid var(--glass-brd);
+    border-radius:var(--radius);
+    padding:16px 15px;
+    margin-bottom:14px;
+    -webkit-backdrop-filter:blur(14px);
+    backdrop-filter:blur(14px);
+    box-shadow:0 8px 30px rgba(0,0,0,0.35);
+  }
+  .card h2{margin:0 0 4px; font-size:16px;}
+  .card .sub{color:var(--txt2); font-size:12.5px; margin:0 0 14px;}
+
+  .evt{
+    display:flex; flex-direction:column; gap:2px;
+    border-left:3px solid var(--red); padding:2px 0 2px 12px; margin-bottom:16px;
+  }
+  .evt .t{font-size:18px; font-weight:700;}
+  .evt .m{color:var(--txt2); font-size:12.5px;}
+  .badge{display:inline-block; font-size:11px; letter-spacing:1px;
+    padding:3px 9px; border-radius:999px; background:rgba(34,197,94,0.15);
+    color:#86efac; border:1px solid rgba(34,197,94,0.35);}
+
+  label{display:block; font-size:12px; color:var(--txt2); margin:10px 0 5px;}
+  input{
+    width:100%; padding:12px 13px; font-size:15px;
+    color:var(--txt); background:rgba(0,0,0,0.30);
+    border:1px solid var(--glass-brd); border-radius:11px; outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  input:focus{border-color:var(--red2); box-shadow:0 0 0 3px rgba(255,31,68,0.18);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  @media (max-width:480px){ .row2{grid-template-columns:1fr;} }
+
+  .colab{
+    position:relative;
+    border:1px solid var(--glass-brd); border-radius:13px;
+    padding:12px 12px 4px; margin-bottom:12px; background:rgba(0,0,0,0.18);
+  }
+  .colab .n{position:absolute; top:-9px; left:12px; font-size:11px;
+    background:var(--red); color:#fff; padding:2px 9px; border-radius:999px; letter-spacing:1px;}
+  .colab .rm{position:absolute; top:8px; right:8px; cursor:pointer;
+    width:28px; height:28px; border-radius:8px; border:1px solid var(--glass-brd);
+    background:rgba(239,68,68,0.12); color:#fca5a5; font-size:16px; line-height:26px; text-align:center;}
+  .colab .rm:active{transform:scale(.94);}
+
+  .btn{
+    display:block; width:100%; text-align:center; cursor:pointer;
+    padding:14px; font-size:15px; font-weight:700; letter-spacing:.4px;
+    border-radius:12px; border:none; margin-top:10px;
+  }
+  .btn-ghost{background:var(--glass); color:var(--txt); border:1px dashed var(--glass-brd);}
+  .btn-red{background:linear-gradient(135deg,var(--red),var(--red2)); color:#fff;
+    box-shadow:0 8px 26px rgba(225,6,0,0.35);}
+  .btn-out{background:transparent; color:var(--txt2); border:1px solid var(--glass-brd);}
+  .btn:active{transform:translateY(1px);}
+  .actions{margin-top:18px;}
+
+  .toast{
+    position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(80px);
+    background:#111318; border:1px solid var(--glass-brd); color:var(--txt);
+    padding:12px 16px; border-radius:12px; font-size:13.5px; max-width:90vw;
+    box-shadow:0 12px 40px rgba(0,0,0,.5); opacity:0; transition:all .28s; z-index:50;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .toast.ok{border-color:rgba(34,197,94,.5);}
+  .toast.err{border-color:rgba(239,68,68,.5);}
+
+  .link-box{margin-top:14px; padding:12px; border-radius:11px;
+    background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.3); font-size:12.5px;}
+  .link-box a{color:#86efac; word-break:break-all;}
+  .msg{padding:30px 10px; text-align:center; color:var(--txt2);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <span class="dot"></span>
+    <b>ILED</b><span>· CREDENCIAMENTO</span>
+  </div>
+
+  <div id="app"><div class="msg">Carregando…</div></div>
+
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* ============================================================
+   CONFIG SUPABASE  →  cole a MESMA url/chave das outras páginas
+   ============================================================ */
+var SUPA_URL = "https://bmgwnoulgthejfjxqugw.supabase.co";
+var SUPA_KEY = "sb_publishable_ya-Eb1L5tsbvC1YF8iYQ-A_ML-ZC8Ef";
+
+/* Token do evento de teste (modo básico). Serve só p/ testar abrindo
+   o arquivo direto. Em produção, cada evento entra pela URL: ?ev=... */
+var EV_PADRAO = "3e7bc95c-9914-4d3c-8779-c8f2f2372233";
+
+/* ---------- estado ---------- */
+var state = { evento:null, empresa:null, colabs:[] };
+var removidos = [];
+var uidSeq = 1;
+
+/* ---------- util ---------- */
+function $(id){ return document.getElementById(id); }
+function qs(name){
+  var m = new RegExp("[?&]"+name+"=([^&]+)").exec(window.location.search);
+  return m ? decodeURIComponent(m[1]) : "";
+}
+function toast(txt, kind){
+  var t = $("toast");
+  t.className = "toast show " + (kind || "");
+  t.textContent = txt;
+  setTimeout(function(){ t.className = "toast " + (kind || ""); }, 3200);
+}
+function esc(v){ return v == null ? "" : String(v); }
+
+/* ---------- máscaras ---------- */
+function maskCPF(v){
+  v = v.replace(/\D/g,"").slice(0,11);
+  v = v.replace(/(\d{3})(\d)/,"$1.$2");
+  v = v.replace(/(\d{3})(\d)/,"$1.$2");
+  v = v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+  return v;
+}
+function maskCNPJ(v){
+  v = v.replace(/\D/g,"").slice(0,14);
+  v = v.replace(/(\d{2})(\d)/,"$1.$2");
+  v = v.replace(/(\d{3})(\d)/,"$1.$2");
+  v = v.replace(/(\d{3})(\d)/,"$1/$2");
+  v = v.replace(/(\d{4})(\d{1,2})$/,"$1-$2");
+  return v;
+}
+function maskTel(v){
+  v = v.replace(/\D/g,"").slice(0,11);
+  if(v.length > 10){ v = v.replace(/(\d{2})(\d{5})(\d{0,4})/,"($1) $2-$3"); }
+  else { v = v.replace(/(\d{2})(\d{4})(\d{0,4})/,"($1) $2-$3"); }
+  return v;
+}
+
+/* ---------- REST ---------- */
+async function api(path, method, body){
+  var headers = {
+    "apikey": SUPA_KEY,
+    "Authorization": "Bearer " + SUPA_KEY,
+    "Content-Type": "application/json",
+    "Prefer": "return=representation"
+  };
+  var opt = { method: method || "GET", headers: headers };
+  if(body){ opt.body = JSON.stringify(body); }
+  var res = await fetch(SUPA_URL + "/rest/v1/" + path, opt);
+  if(!res.ok){ var t = await res.text(); throw new Error(res.status + " " + t); }
+  var txt = await res.text();
+  return txt ? JSON.parse(txt) : null;
+}
+
+/* ============================================================
+   CARGA INICIAL
+   ============================================================ */
+async function init(){
+  if(SUPA_URL.indexOf("SEU-PROJETO") !== -1){
+    $("app").innerHTML = '<div class="msg">⚙️ Configure <b>SUPA_URL</b> e <b>SUPA_KEY</b> no topo do script<br>(as mesmas das outras páginas ILED).</div>';
+    return;
+  }
+  var evTok  = qs("ev") || EV_PADRAO;
+  var empTok = qs("emp");
+  if(!evTok){
+    $("app").innerHTML = '<div class="msg">Link inválido. Peça ao coordenador da ILED o link de credenciamento deste evento.</div>';
+    return;
+  }
+  try{
+    var evs = await api("cred_eventos?token=eq." + evTok + "&select=*");
+    if(!evs || !evs.length){ throw new Error("evento não encontrado"); }
+    state.evento = evs[0];
+
+    if(empTok){
+      var emps = await api("cred_empresas?token=eq." + empTok + "&select=*,cred_colaboradores(*)");
+      if(emps && emps.length){
+        state.empresa = emps[0];
+        var list = state.empresa.cred_colaboradores || [];
+        for(var i=0;i<list.length;i++){
+          list[i]._uid = uidSeq++;
+          state.colabs.push(list[i]);
+        }
+      }
+    }
+    if(!state.colabs.length){ addColab(); }
+    render();
+  }catch(e){
+    $("app").innerHTML = '<div class="msg">Não foi possível carregar. '+esc(e.message)+'</div>';
+  }
+}
+
+/* ---------- colaboradores em memória ---------- */
+function addColab(){
+  state.colabs.push({ _uid:uidSeq++, nome:"", cpf:"", rg:"", telefone:"", email:"" });
+}
+function removeColab(uid){
+  for(var i=0;i<state.colabs.length;i++){
+    if(state.colabs[i]._uid === uid){
+      if(state.colabs[i].id){ removidos.push(state.colabs[i].id); }
+      state.colabs.splice(i,1);
+      break;
+    }
+  }
+  if(!state.colabs.length){ addColab(); }
+  render();
+}
+function setField(obj, campo, val){ obj[campo] = val; }
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render(){
+  var e = state.evento;
+  var emp = state.empresa || {};
+  var basico = (e.perfil || "basico") === "basico";
+
+  var html = "";
+  html += '<div class="evt">';
+  html +=   '<span class="t">'+esc(e.evento_nome)+'</span>';
+  html +=   '<span class="m">'+esc(e.cliente || "")+(e.local_evento?" · "+esc(e.local_evento):"")+'</span>';
+  html +=   '<span class="m" style="margin-top:6px"><span class="badge">'+(basico?"CADASTRO SIMPLES":"CREDENCIAMENTO COMPLETO")+'</span></span>';
+  html += '</div>';
+
+  /* --- empresa --- */
+  html += '<div class="card"><h2>Empresa prestadora</h2><p class="sub">Dados da empresa que vai enviar a equipe.</p>';
+  html += fld("Razão social", "emp_razao", esc(emp.razao_social));
+  html += '<div class="row2">';
+  html +=   fld("Nome fantasia", "emp_fantasia", esc(emp.nome_fantasia));
+  html +=   fld("CNPJ", "emp_cnpj", esc(emp.cnpj));
+  html += '</div>';
+  html += '<div class="row2">';
+  html +=   fld("Responsável", "emp_resp", esc(emp.resp_nome));
+  html +=   fld("Contato (tel/email)", "emp_contato", esc(emp.resp_contato));
+  html += '</div>';
+  html += '</div>';
+
+  /* --- colaboradores --- */
+  html += '<div class="card"><h2>Equipe ('+state.colabs.length+')</h2>';
+  if(basico){
+    html += '<p class="sub">Cadastro da equipe que vai à montagem. Só os dados básicos.</p>';
+  } else {
+    html += '<p class="sub">Modo completo. O envio de documentos (ASO, NRs) é a próxima etapa — por ora, cadastre a equipe e a função.</p>';
+  }
+
+  for(var i=0;i<state.colabs.length;i++){
+    var c = state.colabs[i];
+    html += '<div class="colab">';
+    html +=   '<span class="n">#'+(i+1)+'</span>';
+    html +=   '<div class="rm" onclick="removeColab('+c._uid+')">×</div>';
+    html +=   fld("Nome completo", "c_nome_"+c._uid, esc(c.nome));
+    html +=   '<div class="row2">';
+    html +=     fld("CPF", "c_cpf_"+c._uid, esc(c.cpf));
+    html +=     fld("RG", "c_rg_"+c._uid, esc(c.rg));
+    html +=   '</div>';
+    html +=   '<div class="row2">';
+    html +=     fld("Telefone", "c_tel_"+c._uid, esc(c.telefone));
+    html +=     fld("Email", "c_email_"+c._uid, esc(c.email));
+    html +=   '</div>';
+    html += '</div>';
+  }
+  html += '<button class="btn btn-ghost" onclick="addColab();render()">+ Adicionar colaborador</button>';
+  html += '</div>';
+
+  /* --- ações --- */
+  html += '<div class="actions">';
+  html +=   '<button class="btn btn-red" onclick="salvar(false)">Salvar cadastro</button>';
+  html +=   '<button class="btn btn-out" onclick="salvar(true)">Salvar e enviar para análise</button>';
+  html += '</div>';
+
+  if(state.empresa && state.empresa.token){
+    var linkEd = window.location.pathname + "?ev=" + e.token + "&emp=" + state.empresa.token;
+    html += '<div class="link-box">🔖 <b>Seu link para editar depois:</b><br><a href="'+linkEd+'">'+window.location.origin+linkEd+'</a></div>';
+  }
+
+  $("app").innerHTML = html;
+  bind();
+}
+
+function fld(label, id, val){
+  return '<label>'+label+'</label><input id="'+id+'" value="'+val+'">';
+}
+
+/* ---------- liga eventos dos inputs ---------- */
+function bind(){
+  bindOne("emp_razao",   function(v){ setEmp("razao_social", v); });
+  bindOne("emp_fantasia",function(v){ setEmp("nome_fantasia", v); });
+  bindOne("emp_cnpj",    function(v){ setEmp("cnpj", v); }, maskCNPJ);
+  bindOne("emp_resp",    function(v){ setEmp("resp_nome", v); });
+  bindOne("emp_contato", function(v){ setEmp("resp_contato", v); });
+
+  for(var i=0;i<state.colabs.length;i++){
+    (function(c){
+      bindOne("c_nome_"+c._uid,  function(v){ c.nome = v; });
+      bindOne("c_cpf_"+c._uid,   function(v){ c.cpf = v; }, maskCPF);
+      bindOne("c_rg_"+c._uid,    function(v){ c.rg = v; });
+      bindOne("c_tel_"+c._uid,   function(v){ c.telefone = v; }, maskTel);
+      bindOne("c_email_"+c._uid, function(v){ c.email = v; });
+    })(state.colabs[i]);
+  }
+}
+function bindOne(id, cb, mask){
+  var el = $(id);
+  if(!el) return;
+  el.addEventListener("input", function(){
+    if(mask){ el.value = mask(el.value); }
+    cb(el.value);
+  });
+}
+function setEmp(campo, val){
+  if(!state.empresa){ state.empresa = {}; }
+  state.empresa[campo] = val;
+}
+
+/* ============================================================
+   SALVAR
+   ============================================================ */
+async function salvar(enviar){
+  var emp = state.empresa || {};
+  if(!emp.razao_social && !emp.nome_fantasia){
+    toast("Informe ao menos a razão social ou o nome fantasia.", "err"); return;
+  }
+  var validos = 0;
+  for(var i=0;i<state.colabs.length;i++){ if(state.colabs[i].nome){ validos++; } }
+  if(!validos){ toast("Cadastre ao menos um colaborador com nome.", "err"); return; }
+
+  try{
+    /* empresa */
+    if(!emp.id){
+      var novo = await api("cred_empresas", "POST", {
+        evento_id: state.evento.id,
+        razao_social: emp.razao_social || null,
+        nome_fantasia: emp.nome_fantasia || null,
+        cnpj: emp.cnpj || null,
+        resp_nome: emp.resp_nome || null,
+        resp_contato: emp.resp_contato || null,
+        status: "rascunho"
+      });
+      state.empresa = novo[0];
+      emp = state.empresa;
+      var url = window.location.pathname + "?ev=" + state.evento.token + "&emp=" + emp.token;
+      history.replaceState(null, "", url);
+    } else {
+      await api("cred_empresas?id=eq." + emp.id, "PATCH", {
+        razao_social: emp.razao_social || null,
+        nome_fantasia: emp.nome_fantasia || null,
+        cnpj: emp.cnpj || null,
+        resp_nome: emp.resp_nome || null,
+        resp_contato: emp.resp_contato || null,
+        atualizado_em: new Date().toISOString()
+      });
+    }
+
+    /* colaboradores */
+    for(var j=0;j<state.colabs.length;j++){
+      var c = state.colabs[j];
+      if(!c.nome){ continue; }
+      var payload = {
+        empresa_id: emp.id,
+        nome: c.nome,
+        cpf: c.cpf || null,
+        rg: c.rg || null,
+        telefone: c.telefone || null,
+        email: c.email || null,
+        status: "pendente"
+      };
+      if(c.id){
+        await api("cred_colaboradores?id=eq." + c.id, "PATCH", payload);
+      } else {
+        var r = await api("cred_colaboradores", "POST", payload);
+        c.id = r[0].id;
+      }
+    }
+
+    /* removidos */
+    for(var k=0;k<removidos.length;k++){
+      await api("cred_colaboradores?id=eq." + removidos[k], "DELETE");
+    }
+    removidos = [];
+
+    if(enviar){
+      await api("cred_empresas?id=eq." + emp.id, "PATCH", { status:"enviado", atualizado_em:new Date().toISOString() });
+      toast("Cadastro enviado para análise da ILED. ✔", "ok");
+    } else {
+      toast("Cadastro salvo. ✔", "ok");
+    }
+    render();
+  }catch(e){
+    toast("Erro ao salvar: " + e.message, "err");
+  }
+}
+
+init();
+</script>
+</body>
+</html>
