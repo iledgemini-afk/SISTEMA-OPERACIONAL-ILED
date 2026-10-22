@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0c">
+<title>Relatório pós-evento · ILED</title>
+<style>
+:root{--bg:#0a0a0c;--card:#15161b;--card2:#1c1e25;--bd:#2a2d36;--tx:#f2f3f5;--mu:#9aa0ac;--red:#e10600;--red2:#ff3b3b;--ok:#37c98a;--warn:#f2b53c}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;-webkit-text-size-adjust:100%}
+body{padding:env(safe-area-inset-top,0) 0 calc(96px + env(safe-area-inset-bottom,0))}
+.bar{height:3px;background:repeating-linear-gradient(90deg,#e10600 0 3px,#37c98a 3px 6px,#3d74ff 6px 9px)}
+header{padding:18px 16px 12px;border-bottom:1px solid var(--bd);background:linear-gradient(180deg,#1a0605,var(--bg))}
+.marca{font-weight:900;letter-spacing:.02em;font-size:15px;color:var(--red2)}
+h1{margin:4px 0 2px;font-size:22px;line-height:1.2}
+.sub{color:var(--mu);font-size:13.5px;line-height:1.4}
+main{max-width:640px;margin:0 auto;padding:12px}
+.bloco{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.bloco h2{margin:0 0 10px;font-size:16px;color:#fff}
+.bloco h2 small{color:var(--mu);font-weight:500;font-size:12.5px;margin-left:6px}
+label.campo{display:block;margin-bottom:10px}
+label.campo span{display:block;font-size:13px;color:var(--mu);margin-bottom:4px}
+input,select,textarea{width:100%;background:var(--card2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:12px;font-size:16px;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--red);outline-offset:1px;border-color:transparent}
+textarea{resize:vertical;min-height:70px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--bd);background:var(--card2);color:var(--mu);border-radius:999px;padding:10px 14px;font-size:15px;font-weight:600}
+.chip.on{background:rgba(225,6,0,.18);border-color:var(--red);color:#fff}
+.item{border-top:1px solid var(--bd);padding:12px 0}
+.item:first-of-type{border-top:0;padding-top:2px}
+.item .q{font-weight:700;margin-bottom:8px;line-height:1.35}
+.sn{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px}
+.sn.dois{grid-template-columns:1fr 1fr}
+.sn button{border:1px solid var(--bd);background:var(--card2);color:var(--mu);border-radius:10px;padding:11px 6px;font-size:15px;font-weight:700}
+.sn button.sim.on,.sn button.ok.on{background:rgba(55,201,138,.18);border-color:var(--ok);color:#7af0b8}
+.sn button.nao.on,.sn button.falha.on{background:rgba(225,6,0,.2);border-color:var(--red);color:#ff9a9a}
+.sn button.na.on{background:rgba(255,255,255,.1);border-color:#777;color:#fff}
+.det{display:flex;gap:8px;align-items:center}
+.det em{font-style:normal;color:var(--mu);font-size:13px;white-space:nowrap}
+.linha{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.linha > *{flex:1}
+.del{flex:0 0 44px;height:46px;border-radius:10px;border:1px solid rgba(225,6,0,.4);background:rgba(225,6,0,.1);color:#ff9a9a;font-size:18px}
+.add{width:100%;border:1px dashed #4a4f5c;background:transparent;color:#cfd3da;border-radius:10px;padding:12px;font-size:15px;font-weight:700}
+.fotos{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.fotos div{position:relative}
+.fotos img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--bd);display:block}
+.fotos button{position:absolute;top:-6px;right:-6px;width:26px;height:26px;border-radius:50%;border:0;background:var(--red);color:#fff;font-weight:800}
+.rodape{position:fixed;left:0;right:0;bottom:0;background:rgba(10,10,12,.96);border-top:1px solid var(--bd);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0))}
+.rodape .in{max-width:640px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.rodape .st{flex:1;font-size:12.5px;color:var(--mu);line-height:1.3}
+.salvar{background:var(--red);color:#fff;border:0;border-radius:12px;padding:15px 22px;font-size:17px;font-weight:800;min-width:150px}
+.salvar[disabled]{opacity:.55}
+.aviso{border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:14.5px;line-height:1.4}
+.aviso.erro{background:rgba(225,6,0,.14);border:1px solid rgba(225,6,0,.5);color:#ffb3b3}
+.aviso.info{background:rgba(61,116,255,.12);border:1px solid rgba(61,116,255,.4);color:#b8caff}
+.feito{text-align:center;padding:40px 18px}
+.feito .ic{width:72px;height:72px;border-radius:50%;background:rgba(55,201,138,.16);border:2px solid var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:36px;color:var(--ok)}
+.feito h2{margin:0 0 6px;font-size:22px}
+.feito p{color:var(--mu);margin:0 0 20px;line-height:1.45}
+.oculto{display:none!important}
+@media (prefers-reduced-motion:no-preference){.feito .ic{animation:pop .35s ease-out}@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+</head>
+<body>
+<div class="bar"></div>
+<header>
+  <div class="marca">iLED Produções</div>
+  <h1>Relatório pós-evento</h1>
+  <div class="sub" id="cab_sub">Preencha ao fim do evento. Ao salvar, o relatório vai direto para o sistema.</div>
+</header>
+<main id="form">
+  <div id="aviso" class="aviso oculto"></div>
+
+  <section class="bloco">
+    <h2>Quem está preenchendo</h2>
+    <label class="campo"><span>Responsável ILED (seu nome)</span><input data-k="responsavel_iled" autocomplete="name"></label>
+    <label class="campo"><span>Seu contato</span><input data-k="contato" type="tel" inputmode="tel"></label>
+  </section>
+
+  <section class="bloco">
+    <h2>Evento</h2>
+    <label class="campo"><span>Evento</span><input data-k="evento"></label>
+    <div class="g2">
+      <label class="campo"><span>Cliente</span><input data-k="cliente"></label>
+      <label class="campo"><span>Produtora</span><input data-k="produtora"></label>
+    </div>
+    <div class="g2">
+      <label class="campo"><span>Local</span><input data-k="local_evento"></label>
+      <label class="campo"><span>Cidade</span><input data-k="cidade"></label>
+    </div>
+    <label class="campo"><span>Montagem</span><input type="date" data-k="data_montagem"></label>
+    <label class="campo"><span>Evento</span><input type="date" data-k="data_evento"></label>
+    <label class="campo"><span>Desmontagem</span><input type="date" data-k="data_desmontagem"></label>
+  </section>
+
+  <section class="bloco">
+    <h2>Equipamento locado</h2>
+    <div class="g2">
+      <label class="campo"><span>Modelo do painel</span><input data-k="painel_modelo"></label>
+      <label class="campo"><span>Pitch</span><input data-k="pitch"></label>
+    </div>
+    <div class="g2">
+      <label class="campo"><span>Dimensão</span><input data-k="dimensao" placeholder="ex.: 6 × 3 m"></label>
+      <label class="campo"><span>Área (m²)</span><input data-k="area_total" inputmode="decimal"></label>
+    </div>
+    <label class="campo"><span>Processadora</span><input data-k="processadora"></label>
+  </section>
+
+  <section class="bloco">
+    <h2>Operação do evento <small>toque no que aconteceu</small></h2>
+    <div class="chips" id="operacao"></div>
+  </section>
+
+  <section class="bloco">
+    <h2>Checklist técnico</h2>
+    <div id="checklist"></div>
+  </section>
+
+  <section class="bloco">
+    <h2>Ocorrências</h2>
+    <div id="ocorr"></div>
+    <button class="add" id="add_oc" type="button">+ Adicionar ocorrência</button>
+  </section>
+
+  <section class="bloco">
+    <h2>Equipe em campo</h2>
+    <div id="equipe"></div>
+    <button class="add" id="add_eq" type="button">+ Adicionar pessoa</button>
+  </section>
+
+  <section class="bloco">
+    <h2>Avaliação do cliente</h2>
+    <div class="g2">
+      <label class="campo"><span>Nota (0 a 10)</span><input type="number" min="0" max="10" inputmode="numeric" data-av="nota_cliente"></label>
+      <label class="campo"><span>Satisfação</span><select data-av="satisfacao"><option value="">—</option><option>Ótima</option><option>Boa</option><option>Regular</option><option>Ruim</option></select></label>
+    </div>
+    <label class="campo"><span>Recomendaria?</span><select data-av="recomendaria"><option value="">—</option><option>Sim</option><option>Não</option></select></label>
+    <label class="campo"><span>O que o cliente comentou</span><textarea data-av="obs" rows="2"></textarea></label>
+  </section>
+
+  <section class="bloco">
+    <h2>Fotos do evento</h2>
+    <div class="fotos" id="fotos"></div>
+    <label class="add" style="display:block;text-align:center;cursor:pointer">+ Tirar ou escolher fotos<input type="file" accept="image/*" multiple id="foto_in" style="display:none"></label>
+  </section>
+
+  <section class="bloco">
+    <h2>Observações gerais</h2>
+    <textarea data-k="observacoes" rows="4"></textarea>
+  </section>
+</main>
+
+<main id="feito" class="oculto">
+  <div class="feito">
+    <div class="ic">✓</div>
+    <h2>Relatório salvo</h2>
+    <p id="feito_txt">Já está no sistema, na aba Produção → Relatório Pós-Evento.</p>
+    <button class="salvar" id="nova" type="button">Preencher outro relatório</button>
+  </div>
+</main>
+
+<div class="rodape" id="rodape"><div class="in">
+  <div class="st" id="st">Rascunho guardado neste celular enquanto você preenche.</div>
+  <button class="salvar" id="salvar" type="button">Salvar relatório</button>
+</div></div>
+
+<script>
+var SB_URL="https://bmgwnoulgthejfjxqugw.supabase.co", SB_KEY="sb_publishable_ya-Eb1L5tsbvC1YF8iYQ-A_ML-ZC8Ef"
+var sb=null
+try{ sb=window.supabase.createClient(SB_URL,SB_KEY) }catch(e){ sb=null }
+function $(id){ return document.getElementById(id) }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function qs(nome){ var m=new RegExp('[?&]'+nome+'=([^&#]*)').exec(location.search); return m?decodeURIComponent(m[1]):'' }
+function lsGet(k){ try{ return localStorage.getItem(k) }catch(e){ return null } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v) }catch(e){} }
+function lsDel(k){ try{ localStorage.removeItem(k) }catch(e){} }
+function aviso(tipo,txt){ var a=$('aviso'); if(!txt){ a.className='aviso oculto'; a.textContent=''; return } a.className='aviso '+tipo; a.textContent=txt; window.scrollTo(0,0) }
+function status(txt){ var s=$('st'); if(s) s.textContent=txt }
+function isoParaBR(iso){ var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(iso||''); return m?(m[3]+'/'+m[2]+'/'+m[1]):(iso||'') }
+function brParaISO(br){ var m=/^(\d{2})\/(\d{2})\/(\d{4})/.exec(br||''); return m?(m[3]+'-'+m[2]+'-'+m[1]):(/^\d{4}-\d{2}-\d{2}/.test(br||'')?String(br).slice(0,10):'') }
+function erroAmigavel(e){
+  var m=String((e&&e.message)||e||'')
+  if(/fetch|network|Failed|load/i.test(m)) return 'Sem conexão com o servidor. O que você preencheu ficou guardado neste celular — toque em Salvar de novo quando tiver sinal.'
+  return 'Não salvou: '+m+'. O que você preencheu ficou guardado neste celular.'
+}
+// liga qualquer [data-k] ao objeto estado (texto/data/select/textarea)
+function ligaCampos(raiz, estado, onMuda){
+  var els=raiz.querySelectorAll('[data-k]')
+  for(var i=0;i<els.length;i++){ (function(el){
+    var k=el.getAttribute('data-k')
+    el.oninput=el.onchange=function(){ estado[k]=el.value; onMuda() }
+  })(els[i]) }
+}
+
+var PE_OPERACAO=['Montagem concluída no prazo','Sinal funcionando','Energia estável','Teste de imagem OK',
+  'Processadora configurada','Estrutura/rigging seguros','Desmontagem sem avarias','Material conferido no retorno']
+var PE_CHECK=['Painel sem pixels apagados','Módulos sem falhas','Brilho adequado ao ambiente','Cabeamento organizado',
+  'Backup de energia disponível','Conteúdo exibido corretamente','Nivelamento/alinhamento OK','Área de operação limpa']
+
+var ID=qs('id'), CHAVE='iled_pe_rascunho_'+(ID||'novo')
+function peNovo(){
+  return {id:null,rel_numero:'',evento:'',cliente:'',produtora:'',local_evento:'',cidade:'',
+    data_montagem:'',data_evento:new Date().toISOString().slice(0,10),data_desmontagem:'',responsavel_iled:lsGet('iled_campo_nome')||'',contato:lsGet('iled_campo_tel')||'',
+    painel_modelo:'',pitch:'',dimensao:'',area_total:'',processadora:'',
+    operacao:{},checklist:{},ocorrencias:[],equipe:[],materiais:[],
+    avaliacao:{nota_cliente:'',satisfacao:'',recomendaria:'',obs:''},fotos:[],observacoes:'',status:'aberto'}
+}
+var PE=peNovo()
+function guardaRascunho(){
+  try{ localStorage.setItem(CHAVE, JSON.stringify(PE)); status('Rascunho guardado neste celular · '+new Date().toLocaleTimeString('pt-BR').slice(0,5)) }
+  catch(e){ status('Celular sem espaço para o rascunho (muitas fotos). Salve assim que tiver sinal.') }
+  if(PE.responsavel_iled) lsSet('iled_campo_nome', PE.responsavel_iled)
+  if(PE.contato) lsSet('iled_campo_tel', PE.contato)
+}
+function pinta(){
+  var els=document.querySelectorAll('#form [data-k]')
+  for(var i=0;i<els.length;i++){ var v=PE[els[i].getAttribute('data-k')]||''; if(els[i].type==='date') v=String(v).slice(0,10); els[i].value=v }
+  var av=document.querySelectorAll('[data-av]')
+  for(var a=0;a<av.length;a++){ av[a].value=PE.avaliacao[av[a].getAttribute('data-av')]||'' }
+  $('operacao').innerHTML=PE_OPERACAO.map(function(op){ return '<button type="button" class="chip'+(PE.operacao[op]?' on':'')+'" data-op="'+esc(op)+'">'+esc(op)+'</button>' }).join('')
+  $('checklist').innerHTML=PE_CHECK.map(function(it,i){
+    var v=PE.checklist[it]
+    return '<div class="item"><div class="q">'+esc(it)+'</div><div class="sn">'+
+      ['ok','falha','na'].map(function(val){ return '<button type="button" class="'+val+(v===val?' on':'')+'" data-ck="'+i+'|'+val+'">'+(val==='ok'?'OK':(val==='falha'?'Falha':'N/A'))+'</button>' }).join('')+
+      '</div></div>'
+  }).join('')
+  pintaOcorr(); pintaEquipe(); pintaFotos(); liga()
+}
+function pintaOcorr(){
+  $('ocorr').innerHTML=PE.ocorrencias.map(function(oc,i){
+    function op(lista,cur){ return lista.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+x+'</option>'}).join('') }
+    return '<div class="item"><textarea rows="2" data-oc="'+i+'|descricao" placeholder="O que aconteceu">'+esc(oc.descricao)+'</textarea>'+
+      '<div class="linha" style="margin-top:8px"><label class="campo" style="margin:0"><span>Gravidade</span><select data-oc="'+i+'|gravidade">'+op(['Baixa','Média','Alta'],oc.gravidade)+'</select></label>'+
+      '<label class="campo" style="margin:0"><span>Resolvido?</span><select data-oc="'+i+'|resolvido">'+op(['Sim','Não'],oc.resolvido)+'</select></label>'+
+      '<button type="button" class="del" style="margin-top:22px" data-deloc="'+i+'" aria-label="Remover ocorrência">✕</button></div></div>'
+  }).join('')||'<div class="sub" style="margin-bottom:10px">Nenhuma ocorrência. Se algo deu errado, registre aqui.</div>'
+  ligaListas()
+}
+function pintaEquipe(){
+  $('equipe').innerHTML=PE.equipe.map(function(m,i){
+    return '<div class="linha"><input data-eq="'+i+'|nome" value="'+esc(m.nome)+'" placeholder="Nome"><input data-eq="'+i+'|funcao" value="'+esc(m.funcao)+'" placeholder="Função">'+
+      '<button type="button" class="del" data-deleq="'+i+'" aria-label="Remover pessoa">✕</button></div>'
+  }).join('')
+  ligaListas()
+}
+function pintaFotos(){
+  $('fotos').innerHTML=PE.fotos.map(function(f,i){ return '<div><img src="'+esc(f.url)+'" alt=""><button type="button" data-delf="'+i+'" aria-label="Remover foto">✕</button></div>' }).join('')
+  var ds=document.querySelectorAll('[data-delf]')
+  for(var i=0;i<ds.length;i++){ ds[i].onclick=function(){ PE.fotos.splice(+this.getAttribute('data-delf'),1); pintaFotos(); guardaRascunho() } }
+}
+function liga(){
+  ligaCampos($('form'), PE, guardaRascunho)
+  var av=document.querySelectorAll('[data-av]')
+  for(var a=0;a<av.length;a++){ av[a].oninput=av[a].onchange=function(){ PE.avaliacao[this.getAttribute('data-av')]=this.value; guardaRascunho() } }
+  var ops=document.querySelectorAll('[data-op]')
+  for(var i=0;i<ops.length;i++){ ops[i].onclick=function(){ var k=this.getAttribute('data-op'); PE.operacao[k]=!PE.operacao[k]; this.className='chip'+(PE.operacao[k]?' on':''); guardaRascunho() } }
+  var cks=document.querySelectorAll('[data-ck]')
+  for(var j=0;j<cks.length;j++){ cks[j].onclick=function(){
+    var p=this.getAttribute('data-ck').split('|'), it=PE_CHECK[+p[0]]
+    PE.checklist[it]=(PE.checklist[it]===p[1])?undefined:p[1]
+    if(PE.checklist[it]===undefined) delete PE.checklist[it]
+    var irm=this.parentNode.querySelectorAll('button')
+    for(var b=0;b<irm.length;b++){ var val=irm[b].getAttribute('data-ck').split('|')[1]; irm[b].className=val+(PE.checklist[it]===val?' on':'') }
+    guardaRascunho()
+  } }
+}
+function ligaListas(){
+  var oc=document.querySelectorAll('[data-oc]')
+  for(var i=0;i<oc.length;i++){ oc[i].oninput=oc[i].onchange=function(){ var p=this.getAttribute('data-oc').split('|'); PE.ocorrencias[+p[0]][p[1]]=this.value; guardaRascunho() } }
+  var eq=document.querySelectorAll('[data-eq]')
+  for(var j=0;j<eq.length;j++){ eq[j].oninput=function(){ var p=this.getAttribute('data-eq').split('|'); PE.equipe[+p[0]][p[1]]=this.value; guardaRascunho() } }
+  var d1=document.querySelectorAll('[data-deloc]')
+  for(var a=0;a<d1.length;a++){ d1[a].onclick=function(){ PE.ocorrencias.splice(+this.getAttribute('data-deloc'),1); pintaOcorr(); guardaRascunho() } }
+  var d2=document.querySelectorAll('[data-deleq]')
+  for(var b=0;b<d2.length;b++){ d2[b].onclick=function(){ PE.equipe.splice(+this.getAttribute('data-deleq'),1); pintaEquipe(); guardaRascunho() } }
+}
+$('add_oc').onclick=function(){ PE.ocorrencias.push({descricao:'',gravidade:'Baixa',resolvido:'Sim'}); pintaOcorr(); guardaRascunho() }
+$('add_eq').onclick=function(){ PE.equipe.push({nome:'',funcao:''}); pintaEquipe(); guardaRascunho() }
+// fotos: reduz no celular (lado maior 800px) antes de guardar — mesmo padrão do sistema
+$('foto_in').onchange=function(){
+  var arr=[].slice.call(this.files||[]), feitas=0, inp=this
+  if(!arr.length) return
+  status('Preparando '+arr.length+' foto(s)…')
+  arr.forEach(function(f){
+    var rd=new FileReader()
+    rd.onload=function(){ var img=new Image(); img.onload=function(){
+      var mx=800, sc=Math.min(1,mx/Math.max(img.width,img.height)), cv=document.createElement('canvas')
+      cv.width=Math.round(img.width*sc); cv.height=Math.round(img.height*sc); cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height)
+      PE.fotos.push({url:cv.toDataURL('image/jpeg',0.75),nome:f.name}); feitas++
+      if(feitas===arr.length){ pintaFotos(); guardaRascunho(); inp.value='' }
+    }; img.src=rd.result }
+    rd.readAsDataURL(f)
+  })
+}
+function proxNumero(){
+  var ano=new Date().getFullYear()
+  return sb.from('producao_posevento').select('id',{count:'exact',head:true}).like('rel_numero','PE-'+ano+'-%').then(function(r){
+    var n=((r&&r.count)||0)+1
+    return 'PE-'+ano+'-'+String(n).padStart(4,'0')
+  })
+}
+$('salvar').onclick=function(){
+  aviso(null)
+  if(!PE.responsavel_iled){ aviso('erro','Preencha seu nome antes de salvar.'); return }
+  if(!PE.evento){ aviso('erro','Preencha o nome do evento.'); return }
+  if(!sb){ aviso('erro',erroAmigavel('network')); return }
+  var btn=$('salvar'); btn.disabled=true; btn.textContent='Salvando…'
+  var numP=PE.rel_numero?Promise.resolve(PE.rel_numero):proxNumero()
+  numP.then(function(num){
+    PE.rel_numero=num
+    var payload={rel_numero:PE.rel_numero,evento:PE.evento,cliente:PE.cliente,produtora:PE.produtora,local_evento:PE.local_evento,cidade:PE.cidade,
+      data_montagem:PE.data_montagem||null,data_evento:PE.data_evento||null,data_desmontagem:PE.data_desmontagem||null,
+      responsavel_iled:PE.responsavel_iled,contato:PE.contato,painel_modelo:PE.painel_modelo,pitch:PE.pitch,dimensao:PE.dimensao,area_total:PE.area_total,processadora:PE.processadora,
+      operacao:PE.operacao,checklist:PE.checklist,ocorrencias:PE.ocorrencias.filter(function(o){return String(o.descricao||'').trim()}),
+      equipe:PE.equipe.filter(function(m){return String(m.nome||'').trim()}),materiais:PE.materiais||[],avaliacao:PE.avaliacao,fotos:PE.fotos,observacoes:PE.observacoes,
+      status:'concluido',atualizado_em:new Date().toISOString()}
+    return PE.id ? sb.from('producao_posevento').update(payload).eq('id',PE.id).select() : sb.from('producao_posevento').insert(payload).select()
+  }).then(function(res){
+    if(res.error) throw res.error
+    lsDel(CHAVE)
+    $('feito_txt').textContent=PE.rel_numero+' · '+PE.evento+' já está no sistema, na aba Produção → Relatório Pós-Evento.'
+    $('form').className='oculto'; $('rodape').className='oculto'; $('feito').className=''
+    window.scrollTo(0,0)
+  }).catch(function(e){ aviso('erro',erroAmigavel(e)); btn.disabled=false; btn.textContent='Salvar relatório' })
+}
+$('nova').onclick=function(){ location.href=location.pathname }
+function inicia(){
+  var r=lsGet(CHAVE)
+  if(r){ try{ PE=JSON.parse(r); pinta(); status('Rascunho recuperado deste celular.'); return }catch(e){} }
+  if(ID && sb){
+    status('Carregando o relatório…')
+    sb.from('producao_posevento').select('*').eq('id',ID).single().then(function(res){
+      if(res.error||!res.data){ aviso('erro','Não encontrei o relatório #'+ID+'. Você pode preencher um novo.'); PE=peNovo(); pinta(); return }
+      var o=res.data; PE=o
+      PE.operacao=PE.operacao||{};PE.checklist=PE.checklist||{};PE.ocorrencias=PE.ocorrencias||[];PE.equipe=PE.equipe||[];PE.materiais=PE.materiais||[];PE.avaliacao=PE.avaliacao||{};PE.fotos=PE.fotos||[]
+      if(!PE.responsavel_iled) PE.responsavel_iled=lsGet('iled_campo_nome')||''
+      $('cab_sub').textContent='Completando o relatório '+(o.rel_numero||('#'+o.id))+'. Ao salvar, atualiza o registro no sistema.'
+      pinta(); status('Relatório carregado.')
+    })
+    return
+  }
+  pinta()
+}
+inicia()
+</script>
+</body>
+</html>
