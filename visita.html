@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0c">
+<title>Visita técnica · ILED</title>
+<style>
+:root{--bg:#0a0a0c;--card:#15161b;--card2:#1c1e25;--bd:#2a2d36;--tx:#f2f3f5;--mu:#9aa0ac;--red:#e10600;--red2:#ff3b3b;--ok:#37c98a;--warn:#f2b53c}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;-webkit-text-size-adjust:100%}
+body{padding:env(safe-area-inset-top,0) 0 calc(96px + env(safe-area-inset-bottom,0))}
+.bar{height:3px;background:repeating-linear-gradient(90deg,#e10600 0 3px,#37c98a 3px 6px,#3d74ff 6px 9px)}
+header{padding:18px 16px 12px;border-bottom:1px solid var(--bd);background:linear-gradient(180deg,#1a0605,var(--bg))}
+.marca{font-weight:900;letter-spacing:.02em;font-size:15px;color:var(--red2)}
+h1{margin:4px 0 2px;font-size:22px;line-height:1.2}
+.sub{color:var(--mu);font-size:13.5px;line-height:1.4}
+main{max-width:640px;margin:0 auto;padding:12px}
+.bloco{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.bloco h2{margin:0 0 10px;font-size:16px;color:#fff}
+.bloco h2 small{color:var(--mu);font-weight:500;font-size:12.5px;margin-left:6px}
+label.campo{display:block;margin-bottom:10px}
+label.campo span{display:block;font-size:13px;color:var(--mu);margin-bottom:4px}
+input,select,textarea{width:100%;background:var(--card2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:12px;font-size:16px;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--red);outline-offset:1px;border-color:transparent}
+textarea{resize:vertical;min-height:70px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--bd);background:var(--card2);color:var(--mu);border-radius:999px;padding:10px 14px;font-size:15px;font-weight:600}
+.chip.on{background:rgba(225,6,0,.18);border-color:var(--red);color:#fff}
+.item{border-top:1px solid var(--bd);padding:12px 0}
+.item:first-of-type{border-top:0;padding-top:2px}
+.item .q{font-weight:700;margin-bottom:8px;line-height:1.35}
+.sn{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px}
+.sn.dois{grid-template-columns:1fr 1fr}
+.sn button{border:1px solid var(--bd);background:var(--card2);color:var(--mu);border-radius:10px;padding:11px 6px;font-size:15px;font-weight:700}
+.sn button.sim.on,.sn button.ok.on{background:rgba(55,201,138,.18);border-color:var(--ok);color:#7af0b8}
+.sn button.nao.on,.sn button.falha.on{background:rgba(225,6,0,.2);border-color:var(--red);color:#ff9a9a}
+.sn button.na.on{background:rgba(255,255,255,.1);border-color:#777;color:#fff}
+.det{display:flex;gap:8px;align-items:center}
+.det em{font-style:normal;color:var(--mu);font-size:13px;white-space:nowrap}
+.linha{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.linha > *{flex:1}
+.del{flex:0 0 44px;height:46px;border-radius:10px;border:1px solid rgba(225,6,0,.4);background:rgba(225,6,0,.1);color:#ff9a9a;font-size:18px}
+.add{width:100%;border:1px dashed #4a4f5c;background:transparent;color:#cfd3da;border-radius:10px;padding:12px;font-size:15px;font-weight:700}
+.fotos{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.fotos div{position:relative}
+.fotos img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--bd);display:block}
+.fotos button{position:absolute;top:-6px;right:-6px;width:26px;height:26px;border-radius:50%;border:0;background:var(--red);color:#fff;font-weight:800}
+.rodape{position:fixed;left:0;right:0;bottom:0;background:rgba(10,10,12,.96);border-top:1px solid var(--bd);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0))}
+.rodape .in{max-width:640px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.rodape .st{flex:1;font-size:12.5px;color:var(--mu);line-height:1.3}
+.salvar{background:var(--red);color:#fff;border:0;border-radius:12px;padding:15px 22px;font-size:17px;font-weight:800;min-width:150px}
+.salvar[disabled]{opacity:.55}
+.aviso{border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:14.5px;line-height:1.4}
+.aviso.erro{background:rgba(225,6,0,.14);border:1px solid rgba(225,6,0,.5);color:#ffb3b3}
+.aviso.info{background:rgba(61,116,255,.12);border:1px solid rgba(61,116,255,.4);color:#b8caff}
+.feito{text-align:center;padding:40px 18px}
+.feito .ic{width:72px;height:72px;border-radius:50%;background:rgba(55,201,138,.16);border:2px solid var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:36px;color:var(--ok)}
+.feito h2{margin:0 0 6px;font-size:22px}
+.feito p{color:var(--mu);margin:0 0 20px;line-height:1.45}
+.oculto{display:none!important}
+@media (prefers-reduced-motion:no-preference){.feito .ic{animation:pop .35s ease-out}@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+</head>
+<body>
+<div class="bar"></div>
+<header>
+  <div class="marca">iLED Produções</div>
+  <h1>Visita técnica</h1>
+  <div class="sub" id="cab_sub">Preencha no local. Ao salvar, a visita vai direto para o sistema.</div>
+</header>
+<main id="form">
+  <div id="aviso" class="aviso oculto"></div>
+
+  <section class="bloco">
+    <h2>Quem está preenchendo</h2>
+    <label class="campo"><span>Seu nome (executor da visita)</span><input data-k="executor_vt" autocomplete="name"></label>
+  </section>
+
+  <section class="bloco">
+    <h2>Evento e local</h2>
+    <label class="campo"><span>Evento / projeto</span><input data-k="evento"></label>
+    <label class="campo"><span>Local</span><input data-k="local"></label>
+    <label class="campo"><span>Endereço</span><input data-k="endereco"></label>
+    <div class="g2">
+      <label class="campo"><span>Data da visita</span><input type="date" id="data_vt_iso"></label>
+      <label class="campo"><span>Nº OS</span><input data-k="num_os" inputmode="numeric"></label>
+    </div>
+    <label class="campo"><span>Comercial</span><input data-k="comercial"></label>
+    <div class="g2">
+      <label class="campo"><span>Responsável no local</span><input data-k="resp_local"></label>
+      <label class="campo"><span>Telefone</span><input data-k="tel" type="tel" inputmode="tel"></label>
+    </div>
+  </section>
+
+  <section class="bloco">
+    <h2>Tipo <small>toque para marcar</small></h2>
+    <div class="chips" id="tipos"></div>
+  </section>
+
+  <section class="bloco">
+    <h2>Datas do evento <small>horários de cada fase</small></h2>
+    <div id="datas"></div>
+  </section>
+
+  <section class="bloco">
+    <h2>Perguntas</h2>
+    <div id="perguntas"></div>
+    <button class="add" id="add_perg" type="button">+ Adicionar pergunta</button>
+  </section>
+</main>
+
+<main id="feito" class="oculto">
+  <div class="feito">
+    <div class="ic">✓</div>
+    <h2>Visita salva</h2>
+    <p id="feito_txt">Já está no sistema, na aba Produção → Visita Técnica.</p>
+    <button class="salvar" id="nova" type="button">Preencher outra visita</button>
+  </div>
+</main>
+
+<div class="rodape" id="rodape"><div class="in">
+  <div class="st" id="st">Rascunho guardado neste celular enquanto você preenche.</div>
+  <button class="salvar" id="salvar" type="button">Salvar visita</button>
+</div></div>
+
+<script>
+var SB_URL="https://bmgwnoulgthejfjxqugw.supabase.co", SB_KEY="sb_publishable_ya-Eb1L5tsbvC1YF8iYQ-A_ML-ZC8Ef"
+var sb=null
+try{ sb=window.supabase.createClient(SB_URL,SB_KEY) }catch(e){ sb=null }
+function $(id){ return document.getElementById(id) }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function qs(nome){ var m=new RegExp('[?&]'+nome+'=([^&#]*)').exec(location.search); return m?decodeURIComponent(m[1]):'' }
+function lsGet(k){ try{ return localStorage.getItem(k) }catch(e){ return null } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v) }catch(e){} }
+function lsDel(k){ try{ localStorage.removeItem(k) }catch(e){} }
+function aviso(tipo,txt){ var a=$('aviso'); if(!txt){ a.className='aviso oculto'; a.textContent=''; return } a.className='aviso '+tipo; a.textContent=txt; window.scrollTo(0,0) }
+function status(txt){ var s=$('st'); if(s) s.textContent=txt }
+function isoParaBR(iso){ var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(iso||''); return m?(m[3]+'/'+m[2]+'/'+m[1]):(iso||'') }
+function brParaISO(br){ var m=/^(\d{2})\/(\d{2})\/(\d{4})/.exec(br||''); return m?(m[3]+'-'+m[2]+'-'+m[1]):(/^\d{4}-\d{2}-\d{2}/.test(br||'')?String(br).slice(0,10):'') }
+function erroAmigavel(e){
+  var m=String((e&&e.message)||e||'')
+  if(/fetch|network|Failed|load/i.test(m)) return 'Sem conexão com o servidor. O que você preencheu ficou guardado neste celular — toque em Salvar de novo quando tiver sinal.'
+  return 'Não salvou: '+m+'. O que você preencheu ficou guardado neste celular.'
+}
+// liga qualquer [data-k] ao objeto estado (texto/data/select/textarea)
+function ligaCampos(raiz, estado, onMuda){
+  var els=raiz.querySelectorAll('[data-k]')
+  for(var i=0;i<els.length;i++){ (function(el){
+    var k=el.getAttribute('data-k')
+    el.oninput=el.onchange=function(){ estado[k]=el.value; onMuda() }
+  })(els[i]) }
+}
+
+var VT_PERGUNTAS_PADRAO=[
+ {pergunta:'Fácil acesso p/ caminhão?',resposta:null,detLabel:'Distância:',detalhe:''},
+ {pergunta:'Limite de tamanho p/ caminhão?',resposta:null,detLabel:'Limite máximo:',detalhe:''},
+ {pergunta:'Local c/ doca?',resposta:null,detLabel:'Altura:',detalhe:''},
+ {pergunta:'Carregadores?',resposta:null,detLabel:'Quantidade:',detalhe:''},
+ {pergunta:'Credenciais?',resposta:null,detLabel:'Quantidade:',detalhe:''},
+ {pergunta:'Estacionamento no local?',resposta:null,detLabel:'Valor:',detalhe:''},
+ {pergunta:'Teremos TVs?',resposta:null,detLabel:'Modelo:',detalhe:''},
+ {pergunta:'Qual tipo de instalação (TVs)?',resposta:null,detLabel:'Obs:',detalhe:''},
+ {pergunta:'Qual tipo de conteúdo (TVs)?',resposta:null,detLabel:'Obs:',detalhe:''},
+ {pergunta:'Algum sinal externo (TVs)?',resposta:null,detLabel:'Tipo e conexão:',detalhe:''},
+ {pergunta:'Cases vazios ficam no local?',resposta:null,detLabel:'Obs:',detalhe:''},
+ {pergunta:'Montagem rigging?',resposta:null,detLabel:'Modelo:',detalhe:''},
+ {pergunta:'Montagem stacking?',resposta:null,detLabel:'Modelo:',detalhe:''},
+ {pergunta:'Gennie p/ montagem?',resposta:null,detLabel:'Modelo:',detalhe:''},
+ {pergunta:'Escada p/ montagem?',resposta:null,detLabel:'Modelo/Tamanho:',detalhe:''},
+ {pergunta:'Qual raiz elétrica?',resposta:null,detLabel:'Tipo/Modelo:',detalhe:''},
+ {pergunta:'Pontos próximo ao equipamento?',resposta:null,detLabel:'Distância:',detalhe:''},
+ {pergunta:'Tensão 220V?',resposta:null,detLabel:'Conexão:',detalhe:''},
+ {pergunta:'Tensão 380V?',resposta:null,detLabel:'Conexão:',detalhe:''},
+ {pergunta:'Sistema fica na house mix?',resposta:null,detLabel:'Distância:',detalhe:''},
+ {pergunta:'Sistema fica atrás do equipamento?',resposta:null,detLabel:'Medidas:',detalhe:''},
+ {pergunta:'Fácil acesso p/ manutenção?',resposta:null,detLabel:'Medidas:',detalhe:''},
+ {pergunta:'Gerenciamento iLED?',resposta:null,detLabel:'',detalhe:''},
+ {pergunta:'Qual tipo de conteúdo?',resposta:null,detLabel:'Obs:',detalhe:''},
+ {pergunta:'Tem layout e planta?',resposta:null,detLabel:'Obs:',detalhe:''},
+ {pergunta:'Pixel map?',resposta:null,detLabel:'Obs:',detalhe:''},
+ {pergunta:'Algum sinal externo?',resposta:null,detLabel:'Tipo e conexão:',detalhe:''},
+ {pergunta:'PowerPoint ou Keynote (Apple)?',resposta:null,detLabel:'Modelo:',detalhe:''},
+ {pergunta:'PPT ou Cue Light?',resposta:null,detLabel:'Modelo:',detalhe:''}
+]
+var VT_FASES=['Descarga','Montagem','Teste','Evento','Desmontagem','Carga']
+var VT_TIPOS=['Show','Corporativo','Varejo','Outros','Indoor','Outdoor']
+
+var ID=qs('id'), CHAVE='iled_vt_rascunho_'+(ID||'novo')
+function vtNovo(){
+  return {id:null, local:'',endereco:'',data_vt:'',executor_vt:lsGet('iled_campo_nome')||'',num_os:'',comercial:'',evento:'',resp_local:'',tel:'',
+    tipos:{}, datas:VT_FASES.map(function(f){return {fase:f,inicio:'',termino:'',obs:''}}),
+    perguntas:VT_PERGUNTAS_PADRAO.map(function(p){return {pergunta:p.pergunta,resposta:null,detLabel:p.detLabel,detalhe:''}})}
+}
+var VT=vtNovo()
+function guardaRascunho(){ lsSet(CHAVE, JSON.stringify(VT)); if(VT.executor_vt) lsSet('iled_campo_nome', VT.executor_vt); status('Rascunho guardado neste celular · '+new Date().toLocaleTimeString('pt-BR').slice(0,5)) }
+
+function pinta(){
+  // campos simples
+  var els=document.querySelectorAll('#form [data-k]')
+  for(var i=0;i<els.length;i++){ els[i].value=VT[els[i].getAttribute('data-k')]||'' }
+  $('data_vt_iso').value=brParaISO(VT.data_vt)
+  // tipos
+  $('tipos').innerHTML=VT_TIPOS.map(function(t){ return '<button type="button" class="chip'+(VT.tipos[t]?' on':'')+'" data-tipo="'+esc(t)+'">'+esc(t)+'</button>' }).join('')
+  // datas
+  $('datas').innerHTML=VT.datas.map(function(d,i){
+    return '<div class="item"><div class="q">'+esc(d.fase)+'</div>'+
+      '<div class="g2"><label class="campo"><span>Início</span><input type="time" data-d="'+i+'|inicio" value="'+esc(d.inicio)+'"></label>'+
+      '<label class="campo"><span>Término</span><input type="time" data-d="'+i+'|termino" value="'+esc(d.termino)+'"></label></div>'+
+      '<input data-d="'+i+'|obs" value="'+esc(d.obs)+'" placeholder="Observações"></div>'
+  }).join('')
+  pintaPerguntas()
+  liga()
+}
+function pintaPerguntas(){
+  $('perguntas').innerHTML=VT.perguntas.map(function(p,i){
+    var extra=p._nova
+      ? '<input data-p="'+i+'|pergunta" value="'+esc(p.pergunta)+'" placeholder="Escreva a pergunta" style="margin-bottom:8px">'
+      : '<div class="q">'+esc(p.pergunta)+'</div>'
+    return '<div class="item">'+extra+
+      '<div class="sn dois"><button type="button" class="sim'+(p.resposta==='sim'?' on':'')+'" data-r="'+i+'|sim">Sim</button>'+
+      '<button type="button" class="nao'+(p.resposta==='nao'?' on':'')+'" data-r="'+i+'|nao">Não</button></div>'+
+      '<div class="det">'+(p.detLabel?('<em>'+esc(p.detLabel)+'</em>'):'')+'<input data-p="'+i+'|detalhe" value="'+esc(p.detalhe)+'" placeholder="Detalhe (opcional)"></div>'+
+      (p._nova?'<button type="button" class="add" style="margin-top:8px;border-color:rgba(225,6,0,.4);color:#ff9a9a" data-delp="'+i+'">Remover esta pergunta</button>':'')+
+      '</div>'
+  }).join('')
+  ligaPerguntas()
+}
+function liga(){
+  ligaCampos($('form'), VT, guardaRascunho)
+  $('data_vt_iso').onchange=function(){ VT.data_vt=isoParaBR(this.value); guardaRascunho() }
+  var ts=document.querySelectorAll('[data-tipo]')
+  for(var i=0;i<ts.length;i++){ ts[i].onclick=function(){ var t=this.getAttribute('data-tipo'); VT.tipos[t]=!VT.tipos[t]; this.className='chip'+(VT.tipos[t]?' on':''); guardaRascunho() } }
+  var ds=document.querySelectorAll('[data-d]')
+  for(var j=0;j<ds.length;j++){ ds[j].oninput=ds[j].onchange=function(){ var p=this.getAttribute('data-d').split('|'); VT.datas[+p[0]][p[1]]=this.value; guardaRascunho() } }
+}
+function ligaPerguntas(){
+  var rs=document.querySelectorAll('[data-r]')
+  for(var i=0;i<rs.length;i++){ rs[i].onclick=function(){
+    var p=this.getAttribute('data-r').split('|'), k=+p[0]
+    VT.perguntas[k].resposta=(VT.perguntas[k].resposta===p[1])?null:p[1]
+    var irmaos=this.parentNode.querySelectorAll('button')
+    for(var b=0;b<irmaos.length;b++){ var r=irmaos[b].getAttribute('data-r').split('|')[1]; irmaos[b].className=r+(VT.perguntas[k].resposta===r?' on':'') }
+    guardaRascunho()
+  } }
+  var ps=document.querySelectorAll('[data-p]')
+  for(var j=0;j<ps.length;j++){ ps[j].oninput=function(){ var p=this.getAttribute('data-p').split('|'); VT.perguntas[+p[0]][p[1]]=this.value; guardaRascunho() } }
+  var dl=document.querySelectorAll('[data-delp]')
+  for(var d=0;d<dl.length;d++){ dl[d].onclick=function(){ VT.perguntas.splice(+this.getAttribute('data-delp'),1); pintaPerguntas(); guardaRascunho() } }
+}
+$('add_perg').onclick=function(){ VT.perguntas.push({pergunta:'',resposta:null,detLabel:'Obs:',detalhe:'',_nova:true}); pintaPerguntas(); guardaRascunho() }
+
+$('salvar').onclick=function(){
+  aviso(null)
+  if(!VT.executor_vt){ aviso('erro','Preencha seu nome antes de salvar.'); return }
+  if(!VT.evento && !VT.local){ aviso('erro','Preencha pelo menos o evento ou o local.'); return }
+  if(!sb){ aviso('erro',erroAmigavel('network')); return }
+  var btn=$('salvar'); btn.disabled=true; btn.textContent='Salvando…'
+  var perg=VT.perguntas.filter(function(p){return String(p.pergunta||'').trim()}).map(function(p){return {pergunta:p.pergunta,resposta:p.resposta,detLabel:p.detLabel,detalhe:p.detalhe}})
+  var payload={local:VT.local,endereco:VT.endereco,data_vt:VT.data_vt,executor_vt:VT.executor_vt,num_os:VT.num_os,
+    comercial:VT.comercial,evento:VT.evento,resp_local:VT.resp_local,tel:VT.tel,
+    tipos:VT.tipos,datas:VT.datas,perguntas:perg,atualizado_em:new Date().toISOString()}
+  var q=VT.id ? sb.from('visitas_tecnicas').update(payload).eq('id',VT.id).select() : sb.from('visitas_tecnicas').insert(payload).select()
+  q.then(function(res){
+    if(res.error) throw res.error
+    var reg=(res.data&&res.data[0])||{}
+    lsDel(CHAVE)
+    $('feito_txt').textContent='Visita #'+(reg.id||VT.id||'')+(VT.evento?(' · '+VT.evento):'')+' já está no sistema, na aba Produção → Visita Técnica.'
+    $('form').className='oculto'; $('rodape').className='oculto'; $('feito').className=''
+    window.scrollTo(0,0)
+  }).catch(function(e){ aviso('erro',erroAmigavel(e)); btn.disabled=false; btn.textContent='Salvar visita' })
+}
+$('nova').onclick=function(){ location.href=location.pathname }
+
+// início: registro do link (?id=) > rascunho deste celular > em branco
+function inicia(){
+  var r=lsGet(CHAVE)
+  if(r){ try{ VT=JSON.parse(r); pinta(); status('Rascunho recuperado deste celular.'); return }catch(e){} }
+  if(ID && sb){
+    status('Carregando a visita…')
+    sb.from('visitas_tecnicas').select('*').eq('id',ID).single().then(function(res){
+      if(res.error||!res.data){ aviso('erro','Não encontrei a visita #'+ID+'. Você pode preencher uma nova.'); VT=vtNovo(); pinta(); return }
+      var v=res.data
+      VT={id:v.id,local:v.local||'',endereco:v.endereco||'',data_vt:v.data_vt||'',executor_vt:v.executor_vt||lsGet('iled_campo_nome')||'',num_os:v.num_os||'',comercial:v.comercial||'',evento:v.evento||'',resp_local:v.resp_local||'',tel:v.tel||'',
+        tipos:v.tipos||{}, datas:(v.datas&&v.datas.length)?v.datas:vtNovo().datas, perguntas:(v.perguntas&&v.perguntas.length)?v.perguntas:vtNovo().perguntas}
+      $('cab_sub').textContent='Completando a visita #'+v.id+'. Ao salvar, atualiza o registro no sistema.'
+      pinta(); status('Visita #'+v.id+' carregada.')
+    })
+    return
+  }
+  pinta()
+}
+inicia()
+</script>
+</body>
+</html>
